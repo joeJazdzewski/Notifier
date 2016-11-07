@@ -9,12 +9,6 @@ namespace Common.Models
 {
     public class NotiferModel : INotifierModel
     {
-        public NotiferModel()
-        {
-            _dtExpiration = DateTime.MinValue;
-            Message = "Hi, I'm the NotifierModel";
-        }
-
         private DateTime _dtExpiration { get; set; }
 
         public string Expiration {
@@ -29,5 +23,16 @@ namespace Common.Models
         }
 
         public string Message { get; set; }
+
+        public NotiferModel()
+        {
+            _dtExpiration = DateTime.MinValue;
+            Message = "Hi, I'm the NotifierModel";
+        }
+
+        public DateTime GetExpirationDate()
+        {
+            return _dtExpiration;
+        }
     }
 }

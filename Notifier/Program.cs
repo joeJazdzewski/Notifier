@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Middleware.Classes;
+using Middleware.Interfaces;
+using Common;
 using Common.Interfaces;
 using Common.Models;
 using System.Windows.Forms;
@@ -14,17 +16,14 @@ namespace Notifier
     {
         static void Main(string[] args)
         {
-            string filePath = @"c://Notifier";
-            string fileName = @"data.xml";
             DateTime triggerDate = DateTime.Parse(System.Configuration.ConfigurationManager.AppSettings["TriggerDateTime"]);
 
-            var xM = new XmlMiddleware<NotiferModel>(filePath, fileName, "root");
+            IMiddleware<NotiferModel> xM = new XmlMiddleware<NotiferModel>(NotifierFileInfo.FilePath, NotifierFileInfo.FileName, NotifierFileInfo.RootNodeName);
 
-            var readData = (NotiferModel)xM.Read();
+            NotiferModel readData = xM.Read();
             NotiferModel currentModel = readData == null ? new NotiferModel() : readData;
-            DateTime curExpiration = DateTime.Parse(currentModel.Expiration);
 
-            if (curExpiration < triggerDate)
+            if (currentModel.GetExpirationDate() < triggerDate)
             {
                 MessageBox.Show(currentModel.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 NotiferModel newModel = currentModel;
